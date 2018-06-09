@@ -59,10 +59,7 @@ module.exports = {
       passwordResetTokenExpiresAt: 0
     });
 
-    // Log the user in.
-    this.req.session.userId = userRecord.id;
-
-    return exits.success();
+    return exits.success({ token: JwtService.issue({id: newUserRecord.id}) });
 
   }
 

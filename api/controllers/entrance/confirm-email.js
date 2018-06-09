@@ -5,9 +5,9 @@ module.exports = {
 
 
   description:
-`Confirm a new user's email address, or an existing user's request for an email address change,
-then redirect to either a special landing page (for newly-signed up users), or the account page
-(for existing users who just changed their email address).`,
+    `Confirm a new user's email address, or an existing user's request for an email address change,
+    then redirect to either a special landing page (for newly-signed up users), or the account page
+    (for existing users who just changed their email address).`,
 
 
   inputs: {

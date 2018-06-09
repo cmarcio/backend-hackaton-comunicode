@@ -18,82 +18,6 @@ module.exports = function defineCustomHook(sails) {
 
       sails.log.info('Initializing hook... (`api/hooks/custom`)');
 
-      // Check Stripe/Mailgun configuration (for billing and emails).
-      var IMPORTANT_STRIPE_CONFIG = ['stripeSecret', 'stripePublishableKey'];
-      var IMPORTANT_MAILGUN_CONFIG = ['mailgunSecret', 'mailgunDomain', 'internalEmailAddress'];
-      var isMissingStripeConfig = _.difference(IMPORTANT_STRIPE_CONFIG, Object.keys(sails.config.custom)).length > 0;
-      var isMissingMailgunConfig = _.difference(IMPORTANT_MAILGUN_CONFIG, Object.keys(sails.config.custom)).length > 0;
-
-      if (isMissingStripeConfig || isMissingMailgunConfig) {
-
-        let missingFeatureText = isMissingStripeConfig && isMissingMailgunConfig ? 'billing and email' : isMissingStripeConfig ? 'billing' : 'email';
-        let suffix = '';
-        if (_.contains(['silly'], sails.config.log.level)) {
-          suffix =
-`
-> Tip: To exclude sensitive credentials from source control, use:
-> • config/local.js (for local development)
-> • environment variables (for production)
->
-> If you want to check them in to source control, use:
-> • config/custom.js  (for development)
-> • config/env/staging.js  (for staging)
-> • config/env/production.js  (for production)
->
-> (See https://sailsjs.com/docs/concepts/configuration for help configuring Sails.)
-`;
-        }
-
-        let problems = [];
-        if (sails.config.custom.stripeSecret === undefined) {
-          problems.push('No `sails.config.custom.stripeSecret` was configured.');
-        }
-        if (sails.config.custom.stripePublishableKey === undefined) {
-          problems.push('No `sails.config.custom.stripePublishableKey` was configured.');
-        }
-        if (sails.config.custom.mailgunSecret === undefined) {
-          problems.push('No `sails.config.custom.mailgunSecret` was configured.');
-        }
-        if (sails.config.custom.mailgunDomain === undefined) {
-          problems.push('No `sails.config.custom.mailgunDomain` was configured.');
-        }
-        if (sails.config.custom.internalEmailAddress === undefined) {
-          problems.push('No `sails.config.custom.internalEmailAddress` was configured.');
-        }
-
-        sails.log.verbose(
-`Some optional settings have not been configured yet:
----------------------------------------------------------------------
-${problems.join('\n')}
-
-Until this is addressed, this app's ${missingFeatureText} features
-will be disabled and/or hidden in the UI.
-
- [?] If you're unsure or need advice, come by https://sailsjs.com/support
----------------------------------------------------------------------${suffix}`);
-      }//ﬁ
-
-      // Set an additional config keys based on whether Stripe config is available.
-      // This will determine whether or not to enable various billing features.
-      sails.config.custom.enableBillingFeatures = !isMissingStripeConfig;
-
-      // After "sails-hook-organics" finishes initializing, configure Stripe
-      // and Mailgun packs with any available credentials.
-      sails.after('hook:organics:loaded', ()=>{
-
-        sails.helpers.stripe.configure({
-          secret: sails.config.custom.stripeSecret
-        });
-
-        sails.helpers.mailgun.configure({
-          secret: sails.config.custom.mailgunSecret,
-          domain: sails.config.custom.mailgunDomain,
-          from: sails.config.custom.fromEmailAddress,
-          fromName: sails.config.custom.fromName,
-        });
-
-      });//_∏_
-
       // ... Any other app-specific setup code that needs to run on lift,
       // even in production, goes here ...
 
@@ -157,17 +81,22 @@ will be disabled and/or hidden in the UI.
               return res.redirect(sails.config.custom.baseUrl+req.url);
             }//•
 
-            // No session? Proceed as usual.
+            // No Token? Proceed as usual.
             // (e.g. request for a static asset)
-            if (!req.session) { return next(); }
+            if (!req.header('authorization')) { console.log(1); return next(); }
 
-            // Not logged in? Proceed as usual.
-            if (!req.session.userId) { return next(); }
-
-            // Otherwise, look up the logged-in user.
-            var loggedInUser = await User.findOne({
-              id: req.session.userId
-            });
+            // Decript the token
+            let loggedInUser;
+            try {
+              const authorization = req.header('authorization').split(' ');
+              const { id } = await JwtService.verify(authorization[1]);
+              // Look up the logged-in user.
+              loggedInUser = await User.findOne({ id });
+            } catch (error) {
+              // Not logged in? Proceed as usual.
+              console.log(error);
+              console.log(2); return next();
+            }
 
             // If the logged-in user has gone missing, log a warning,
             // wipe the user id from the requesting user agent's session,
@@ -235,11 +164,6 @@ will be disabled and/or hidden in the UI.
               }//ﬁ
 
               res.locals.me = sanitizedUser;
-
-              // Include information on the locals as to whether billing features
-              // are enabled for this app, and whether email verification is required.
-              res.locals.isBillingEnabled = sails.config.custom.enableBillingFeatures;
-              res.locals.isEmailVerificationRequired = sails.config.custom.verifyEmailAddresses;
 
             }//ﬁ
 

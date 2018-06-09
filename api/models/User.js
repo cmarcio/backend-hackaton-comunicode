@@ -115,5 +115,12 @@ module.exports = {
 
   },
 
+  customToJSON: function() {
+    // Return a shallow copy of this record with sensitive information removed.
+    return _.omit(this, [
+      'password','passwordResetToken', 'passwordResetTokenExpiresAt', 'emailProofToken', 'emailProofTokenExpiresAt', 'emailChangeCandidate', 'tosAcceptedByIp'
+    ]);
+  },
+
 
 };

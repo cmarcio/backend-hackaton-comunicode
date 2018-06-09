@@ -8,13 +8,13 @@ module.exports = {
 
 
   extendedDescription:
-`This creates a new user record in the database, signs in the requesting user agent
-by modifying its [session](https://sailsjs.com/documentation/concepts/sessions), and
-(if emailing with Mailgun is enabled) sends an account verification email.
+    `This creates a new user record in the database, signs in the requesting user agent
+    by modifying its [session](https://sailsjs.com/documentation/concepts/sessions), and
+    (if emailing with Mailgun is enabled) sends an account verification email.
 
-If a verification email is sent, the new user's account is put in an "unconfirmed" state
-until they confirm they are using a legitimate email address (by clicking the link in
-the account verification message.)`,
+    If a verification email is sent, the new user's account is put in an "unconfirmed" state
+    until they confirm they are using a legitimate email address (by clicking the link in
+    the account verification message.)`,
 
 
   inputs: {
@@ -82,25 +82,11 @@ the account verification message.)`,
     .intercept({name: 'UsageError'}, 'invalid')
     .fetch();
 
-    // If billing feaures are enabled, save a new customer entry in the Stripe API.
-    // Then persist the Stripe customer id in the database.
-    if (sails.config.custom.enableBillingFeatures) {
-      let stripeCustomerId = await sails.helpers.stripe.saveBillingInfo.with({
-        emailAddress: newEmailAddress
-      });
-      await User.update(newUserRecord.id).set({
-        stripeCustomerId
-      });
-    }
-
-    // Store the user's new id in their session.
-    this.req.session.userId = newUserRecord.id;
-
     if (sails.config.custom.verifyEmailAddresses) {
       // Send "confirm account" email
       await sails.helpers.sendTemplateEmail.with({
         to: newEmailAddress,
-        subject: 'Please confirm your account',
+        subject: 'Por favor, verifique sua conta',
         template: 'email-verify-account',
         templateData: {
           fullName: inputs.fullName,
@@ -112,7 +98,7 @@ the account verification message.)`,
     }
 
     // Since everything went ok, send our 200 response.
-    return exits.success();
+    return exits.success({ token: JwtService.issue({id: newUserRecord.id}) });
 
   }
 
