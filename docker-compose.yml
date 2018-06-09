@@ -1,0 +1,29 @@
+version: '3'
+services:
+  backend:
+    build: .
+    ports: 
+      - "1337:1337"
+    command: npm run watch
+    volumes:
+      - "./api:/usr/src/app/api"
+      - "./.tmp:/usr/src/app/.tmp"
+    environment:
+      - NODE_ENV=development
+      # mongo url
+      - MONGODB_HOST=mongo
+      # - MONGODB_USER-mongo-user-example
+      # - MONGODB_PASSWORD=mongo-password-example
+      # jwt secret
+      - TOKEN_SECRET=this_is_a_secret_dont_tell_anyone
+    links:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - "dbdata:/data/db"
+
+volumes:
+  dbdata:
