@@ -252,6 +252,7 @@ module.exports = {
     ***************************************************************************/
     onlyAllowOrigins: [
       'http://localhost:1337',
+      'https://hackatoken.herokuapp.com'
     ],
 
 
