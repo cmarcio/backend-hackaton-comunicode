@@ -41,6 +41,7 @@ module.exports.routes = {
   // GOALS
   'POST  /api/v1/goal/new-goal':                   { action: 'goal/new-goal' },
   'PUT   /api/v1/goal/update-goal':                { action: 'goal/update-goal' },
+  'PUT   /api/v1/goal/close-goal':                 { action: 'goal/close-goal' },
   'GET   /api/v1/goal/get-goals':                  { action: 'goal/get-goals' },
   'GET   /api/v1/goal/get-goal':                   { action: 'goal/get-goal' },
   
