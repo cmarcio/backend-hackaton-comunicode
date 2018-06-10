@@ -15,9 +15,13 @@ O arquivo de "docker-compose.yml" na raiz do projeto possui já configurado toda
 Para rodar o ambiente em produção talvez seja necessário 
 
 1 - Instalar [Docker](https://docs.docker.com/install/) na máquina.
+
 2 - Instalar [Docker Compose](https://docs.docker.com/compose/install/) na máquina.
+
 3 - Clonar esse projeto em sua máquina: $ git clone https://gitlab.com/hackatoken/hmcm-hackatoken-backend.git
+
 4 - Dentro da pasta do projeto buildar com o docker-compose: $ docker-compose build
+
 5 - Em seguida rodar o servidor com docker-compose: $ docker-compose up
 
 #### Documentação
