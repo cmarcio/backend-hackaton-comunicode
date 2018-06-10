@@ -34,4 +34,6 @@ module.exports.routes = {
 
   // PAYMENT
   'PUT   /api/v1/payment/recurrent-payment':             { action: 'payment/recurrent-payment' },
+  'PUT   /api/v1/payment/cancel-recurrent-payment':      { action: 'payment/cancel-recurrent-payment' },
+  'PUT   /api/v1/payment/payment':                       { action: 'payment/payment' },
 };

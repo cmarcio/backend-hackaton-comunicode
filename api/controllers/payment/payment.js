@@ -2,10 +2,10 @@ const request = require('request');
 
 module.exports = {
 
-    friendlyName: 'Recurrent Payment',
+    friendlyName: 'Payment',
   
   
-    description: 'Make a recurrent payment',
+    description: 'Make a payment',
 
     inputs: {
         
@@ -68,22 +68,22 @@ module.exports = {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             form: {
                 restApi: 'true',
-                'recorrencia.modalidadeVenda': '1',
+                'venda.modalidadeVenda': '1',
                 'empresa.hashEmpresa': 'gmxCheckoutGtwy',
-                'recorrencia.descricaoFatura': 'Doação',
-                'recorrencia.idrecorrenciaEmpresa': 'test',
-                'recorrencia.consumidor.nome': this.req.me.fullName,
-                'recorrencia.consumidor.email': this.req.me.emailAddress,
-                'recorrencia.valor': inputs.value,
-                'recorrencia.parcelas': '1',
-                'cartaoCredito.portador': 'Test recorrencia',
-                'recorrencia.consumidor.cpf': inputs.identity,
+                'venda.descricaoFatura': 'Doação',
+                'venda.idVendaEmpresa': 'test',
+                'venda.consumidor.nome': this.req.me.fullName,
+                'venda.consumidor.email': this.req.me.emailAddress,
+                'venda.valor': inputs.value,
+                'venda.parcelas': '1',
+                'cartaoCredito.portador': 'Test venda',
+                'venda.consumidor.cpf': inputs.identity,
                 'cartaoCredito.numero': inputs.cardNumber,
                 'cartaoCredito.mesValidade': inputs.cardMonth,
                 'cartaoCredito.anoValidade': inputs.cardYear,
                 'cartaoCredito.codSeguranca': inputs.cardSecurityCode,
                 'cartaoCredito.bandeira': inputs.cardType,
-                'recorrencia.produto': 'Doação' 
+                'venda.produto': 'Doação' 
             }
         };
 
@@ -94,9 +94,10 @@ module.exports = {
             if (transaction.status && transaction.status === 'success') {
                 const donation = await Donation.create({
                     value: inputs.value,
-                    recurrent: true,
-                    paymentId: transaction['recorrencia.idRecorrencia'].value,
-                    donator: user.id
+                    recurrent: false,
+                    paymentId: transaction['venda.idVenda'].value,
+                    donator: user.id,
+                    status: 'done'
                 }).fetch();
                 return exits.success(donation);
 

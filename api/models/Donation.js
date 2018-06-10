@@ -22,6 +22,12 @@ module.exports = {
       paymentId: {
         type: 'number'
       },
+
+      status: {
+        type: 'string',
+        isIn: ['done', 'active', 'canceled'],
+        defaultsTo: 'active'
+      },
   
       //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
       //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
