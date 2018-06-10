@@ -11,21 +11,30 @@ module.exports = {
       //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
       //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
       
-      value: {
+      totalValue: {
         type: 'number'
       },
 
-      recurrent: {
-        type: 'boolean'
+      reachedValue: {
+        type: 'number',
+        defaultsTo: 0
       },
 
-      paymentId: {
+      title: {
+        type: 'string'
+      },
+
+      description: {
+        type: 'string'
+      },
+
+      deadline: {
         type: 'number'
       },
 
       status: {
         type: 'string',
-        isIn: ['done', 'active', 'canceled'],
+        isIn: ['done', 'active'],
         defaultsTo: 'active'
       },
   
@@ -33,12 +42,9 @@ module.exports = {
       //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
       //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
-      donator: {
-        model: 'user'
-      },
-
-      goal: {
-        model: 'goal'
+      donations: {
+        collection: 'donation',
+        via: 'goal'
       }
     },
   

@@ -37,4 +37,11 @@ module.exports.routes = {
   'PUT   /api/v1/payment/cancel-recurrent-payment':      { action: 'payment/cancel-recurrent-payment' },
   'PUT   /api/v1/payment/payment':                       { action: 'payment/payment' },
   'GET   /api/v1/payment/my-payments':                   { action: 'payment/my-payments' },
+  
+  // GOALS
+  'POST  /api/v1/goal/new-goal':                   { action: 'goal/new-goal' },
+  'PUT   /api/v1/goal/update-goal':                { action: 'goal/update-goal' },
+  'GET   /api/v1/goal/get-goals':                  { action: 'goal/get-goals' },
+  'GET   /api/v1/goal/get-goal':                   { action: 'goal/get-goal' },
+  
 };
