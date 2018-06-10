@@ -12,7 +12,7 @@ entretanto ele também pode ser executado utilizando o ambiente de execução no
 
 Nesse método todas as dependências do projeto são instaladas e gerenciadas pelo docker, inclusive banco de dados.
 O arquivo de "docker-compose.yml" na raiz do projeto possui já configurado todas as variáveis de ambientes necessárias para executar o servidor no ambiente de development.
-Para rodar o ambiente em produção talvez seja necessário 
+Para rodar o ambiente em produção será necessário sobreescrever essas variáveis.
 
 1 - Instalar [Docker](https://docs.docker.com/install/) na máquina.
 
