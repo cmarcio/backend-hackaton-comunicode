@@ -3,27 +3,29 @@
 a [Sails v1](https://sailsjs.com) application
 
 
-### Links
+### Rodar o projeto
 
-+ [Get started](https://sailsjs.com/get-started)
-+ [Sails framework documentation](https://sailsjs.com/documentation)
-+ [Version notes / upgrading](https://sailsjs.com/documentation/upgrading)
-+ [Deployment tips](https://sailsjs.com/documentation/concepts/deployment)
-+ [Community support options](https://sailsjs.com/support)
-+ [Professional / enterprise options](https://sailsjs.com/enterprise)
+A meneira mais simples (e recomendada) de rodar o projeto é utilizando docker e docker-compose,
+entretanto ele também pode ser executado utilizando o ambiente de execução nodejs.
 
+#### Rodando com o Docker
 
-### Version info
+Nesse método todas as dependências do projeto são instaladas e gerenciadas pelo docker, inclusive banco de dados.
+O arquivo de "docker-compose.yml" na raiz do projeto possui já configurado todas as variáveis de ambientes necessárias para executar o servidor no ambiente de development.
+Para rodar o ambiente em produção talvez seja necessário 
 
-This app was originally generated on Sat Jun 09 2018 12:10:59 GMT-0300 (-03) using Sails v1.0.2.
+1 - Instalar [Docker](https://docs.docker.com/install/) na máquina.
+2 - Instalar [Docker Compose](https://docs.docker.com/compose/install/) na máquina.
+3 - Clonar esse projeto em sua máquina: $ git clone https://gitlab.com/hackatoken/hmcm-hackatoken-backend.git
+4 - Dentro da pasta do projeto buildar com o docker-compose: $ docker-compose build
+5 - Em seguida rodar o servidor com docker-compose: $ docker-compose up
 
-<!-- Internally, Sails used [`sails-generate@1.15.28`](https://github.com/balderdashy/sails-generate/tree/v1.15.28/lib/core-generators/new). -->
+#### Documentação
 
+A documentação básica de todos os endpoints foi feita com o [postman](https://www.getpostman.com/), baixe a [collection](https://drive.google.com/open?id=1iU64Vacbix46H3cnwY4lUMAJAYlfNWoi) 
+e importe no postman para testar as requisições.
+Todos os endpoints feitos estão funcionais e estão documentados no postman.
 
-This project's boilerplate is based on an expanded seed app provided by the [Sails core team](https://sailsjs.com/about) to make it easier for you to build on top of ready-made features like authentication, enrollment, email verification, and billing.  For more information, [drop us a line](https://sailsjs.com/support).
+#### Estrutura do projeto
 
-
-<!--
-Note:  Generators are usually run using the globally-installed `sails` CLI (command-line interface).  This CLI version is _environment-specific_ rather than app-specific, thus over time, as a project's dependencies are upgraded or the project is worked on by different developers on different computers using different versions of Node.js, the Sails dependency in its package.json file may differ from the globally-installed Sails CLI release it was originally generated with.  (Be sure to always check out the relevant [upgrading guides](https://sailsjs.com/upgrading) before upgrading the version of Sails used by your app.  If you're stuck, [get help here](https://sailsjs.com/support).)
--->
-
+A estrutura do projeto segue os padrões do framework sails.js, para mais informações acesse a página com a [documentação oficial](https://sailsjs.com/documentation/reference).
