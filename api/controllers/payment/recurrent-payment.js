@@ -86,18 +86,31 @@ module.exports = {
                 'recorrencia.produto': 'Doação' 
             }
         };
-
+        
+        // chama o servico de pagamento 
         request(options, async function (error, response, body) {
             if (error) return this.res.sendStatus(400);
 
+            // trata a resposta
             const transaction = JSON.parse(body.split('";')[0].substring(1).replace(/\\/g, ''));
             if (transaction.status && transaction.status === 'success') {
+                // pega a meta ativa
+                const goal = await Goal.findOne({ status: 'active' }) || {};
+
+                // salva a doação no banco
                 const donation = await Donation.create({
                     value: inputs.value,
                     recurrent: true,
                     paymentId: transaction['recorrencia.idRecorrencia'].value,
-                    donator: user.id
+                    donator: user.id,
+                    goal: goal.id
                 }).fetch();
+
+                // adiciona o valor da doação ao montante da meta
+                if (goal.id) {
+                    await Goal.update({ id: goal.id }, { reachedValue: goal.reachedValue + inputs.value });
+                }
+
                 return exits.success(donation);
 
             } else {
